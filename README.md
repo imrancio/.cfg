@@ -24,11 +24,16 @@ config status
 config add .vimrc
 config commit -m "Add vimrc"
 config add .zshrc
-config commit -m "Add bashrc"
+config commit -m "Add zshrc"
 config push
 ```
 
 ## Install your dotfiles onto a new system (or migrate to this setup)
+
+> ProTip:fire:: Use my [script](https://files.imranc.io/cfg-install.sh) to setup new system automatically:
+```bash
+bash <(curl -s https://files.imranc.io/cfg-install.sh)
+```
 
 If you already store your configuration/dotfiles in a Git repository, on a new system you can migrate to this setup with the following steps:
 
@@ -47,7 +52,8 @@ echo ".cfg" >> .gitignore
 - Now clone your dotfiles into a bare repository in a "dot" folder of your `$HOME`:
 
 ```bash
-git clone --bare <git-repo-url> $HOME/.cfg
+git clone --bare https://github.com/imrancio/.cfg.git $HOME/.cfg
+# or git clone --bare git@github.com:imrancio/.cfg.git $HOME/.cfg
 ```
 
 - Define the alias in the current shell scope:
@@ -101,12 +107,4 @@ config commit -m "Add vimrc"
 config add .bashrc
 config commit -m "Add bashrc"
 config push
-```
-
-### TODO
-
-Create a script for above steps, create a short url for it and call it like this:
-
-```bash
-curl -Lks https://imranc.io/cfg-install | /bin/bash
 ```
