@@ -51,5 +51,5 @@ alias yaourt='yay' # deprecated - use yay instead (same flags)
 alias yay='yay -a' # yay only for AUR, pacman for everything else
 alias fetch='neofetch'
 alias devenv='deactivate'
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias tree='lsd --tree'
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
