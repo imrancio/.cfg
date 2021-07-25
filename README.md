@@ -7,25 +7,25 @@ If you haven't been tracking your configurations in a Git repository before, you
 
 ```bash
 git init --bare $HOME/.cfg
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-config config --local status.showUntrackedFiles no
-echo "alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'" >> $HOME/.zshrc
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+cfg config --local status.showUntrackedFiles no
+echo "alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'" >> $HOME/.zshrc
 ```
 
 - The first line creates a folder `~/.cfg` which is a Git [bare repository](https://www.saintsjd.com/2011/01/what-is-a-bare-git-repository/) that will track our files.
-- Then we create an alias `config` which we will use instead of the regular `git` when we want to interact with our configuration repository.
-- We set a flag - local to the repository - to hide files we are not explicitly tracking yet. This is so that when you type `config status` and other commands later, files you are not interested in tracking will not show up as `untracked`.
+- Then we create an alias `cfg` which we will use instead of the regular `git` when we want to interact with our configuration repository.
+- We set a flag - local to the repository - to hide files we are not explicitly tracking yet. This is so that when you type `cfg status` and other commands later, files you are not interested in tracking will not show up as `untracked`.
 - Also you can add the alias definition by hand to your `.zshrc` or use the the fourth line provided for convenience.
 
-After you've executed the setup any file within the `$HOME` folder can be versioned with normal commands, replacing `git` with your newly created `config` alias, like:
+After you've executed the setup any file within the `$HOME` folder can be versioned with normal commands, replacing `git` with your newly created `cfg` alias, like:
 
 ```bash
-config status
-config add .vimrc
-config commit -m "Add vimrc"
-config add .zshrc
-config commit -m "Add zshrc"
-config push
+cfg status
+cfg add .vimrc
+cfg commit -m "Add vimrc"
+cfg add .zshrc
+cfg commit -m "Add zshrc"
+cfg push
 ```
 
 ## Install your dotfiles onto a new system (or migrate to this setup)
@@ -40,7 +40,7 @@ If you already store your configuration/dotfiles in a Git repository, on a new s
 - Prior to the installation make sure you have committed the alias to your `.zsh`:
 
 ```bash
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 ```
 
 - And that your source repository ignores the folder where you'll clone it, so that you don't create weird recursion problems:
@@ -59,13 +59,13 @@ git clone --bare https://github.com/imrancio/.cfg.git $HOME/.cfg
 - Define the alias in the current shell scope:
 
 ```bash
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias cfg='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 ```
 
 - Checkout the actual content from the bare repository to your `$HOME`:
 
 ```bash
-config checkout
+cfg checkout
 ```
 
 - The step above might fail with a message like:
@@ -89,22 +89,22 @@ xargs -I{} mv {} .config-backup/{}
 - Re-run the check out if you had problems:
 
 ```bash
-config checkout
+cfg checkout
 ```
 
 - Set the flag `showUntrackedFiles` to `no` on this specific (local) repository:
 
 ```bash
-config config --local status.showUntrackedFiles no
+cfg config --local status.showUntrackedFiles no
 ```
 
-- You're done, from now on you can now type `config` commands to add and update your dotfiles:
+- You're done, from now on you can now type `cfg` commands to add and update your dotfiles:
 
 ```bash
-config status
-config add .vimrc
-config commit -m "Add vimrc"
-config add .bashrc
-config commit -m "Add bashrc"
-config push
+cfg status
+cfg add .vimrc
+cfg commit -m "Add vimrc"
+cfg add .bashrc
+cfg commit -m "Add bashrc"
+cfg push
 ```
