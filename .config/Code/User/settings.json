@@ -1,0 +1,106 @@
+{
+    "terminal.integrated.fontFamily": "TerminessTTF Nerd Font Mono",
+    "terminal.integrated.fontSize": 15,
+    "workbench.colorCustomizations": {
+        "terminal.foreground": "#839496",
+        "terminal.background": "#002833",
+        "terminal.ansiBlack": "#003541",
+        "terminal.ansiBlue": "#268bd2",
+        "terminal.ansiCyan": "#2aa198",
+        "terminal.ansiGreen": "#859901",
+        "terminal.ansiMagenta": "#d33682",
+        "terminal.ansiRed": "#dc322f",
+        "terminal.ansiWhite": "#eee8d5",
+        "terminal.ansiYellow": "#b58901",
+        "terminal.ansiBrightBlack": "#586e75",
+        "terminal.ansiBrightBlue": "#839496",
+        "terminal.ansiBrightCyan": "#93a1a1",
+        "terminal.ansiBrightGreen": "#586e75",
+        "terminal.ansiBrightMagenta": "#6c6ec6",
+        "terminal.ansiBrightRed": "#cb4b16",
+        "terminal.ansiBrightWhite": "#fdf6e3",
+        "terminal.ansiBrightYellow": "#657b83",
+        "terminalCursor.foreground": "#839496",
+        "terminalCursor.background": "#003541"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "terminal.integrated.lineHeight": 1.1,
+    "terminal.external.linuxExec": "terminator",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "terminal.external.windowsExec": "C:\\Windows\\System32\\cm Monopd.exe",
+    "editor.fontFamily": "'Meslo LG M', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.detectLocale": "off",
+    "workbench.startupEditor": "newUntitledFile",
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "window.menuBarVisibility": "toggle",
+    "explorer.confirmDelete": false,
+    "emmet.triggerExpansionOnTab": true,
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+    },
+    "window.zoomLevel": 1,
+    "editor.minimap.enabled": false,
+    "prettier.arrowParens": "avoid",
+    "prettier.trailingComma": "all",
+    "prettier.singleQuote": true,
+    "files.associations": {
+        "Dockerfile.*": "dockerfile",
+        "*.Dockerfile": "dockerfile"
+    },
+    "yaml.schemas": {
+        "file:///home/imran/.vscode/extensions/atlassian.atlascode-2.9.1/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+    },
+    "atlascode.jira.jqlList": [
+        {
+            "id": "92b5c7d1-ffcf-465f-aa6a-6b574814d165",
+            "enabled": true,
+            "name": "My abyss-solutions Issues",
+            "query": "assignee = currentUser() AND resolution = Unresolved ORDER BY lastViewed DESC",
+            "siteId": "11d674a7-9e3a-4de8-a356-da6a796b73db",
+            "monitor": true
+        }
+    ],
+    "atlascode.jira.lastCreateSiteAndProject": {
+        "siteId": "11d674a7-9e3a-4de8-a356-da6a796b73db",
+        "projectKey": "FABW"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "liveshare.authenticationProvider": "GitHub",
+    "jupyter.askForKernelRestart": false,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "redhat.telemetry.enabled": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
+    "eslint.packageManager": "yarn",
+    "prettier.configPath": ".prettierrc.js",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "eslint.lintTask.enable": true,
+    "eslint.format.enable": true,
+}
