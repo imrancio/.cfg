@@ -22,6 +22,7 @@ alias open='xdg-open'
 alias h='history'
 alias mkdirp='mkdir -p'    # make parent dirs as well (no errors)
 alias rmrf='rm -rf'        # recursive remove (directories)
+alias grep='grep --color'  # colorise grep output
 alias ls='ls --color=auto' # colorise ls output
 alias ll='ls -lh'
 alias la='ls -lah'
