@@ -48,6 +48,9 @@ _zsh_autosuggest_strategy_custom_history () {
 [[ -z ${fpath[(re)/usr/share/zsh/site-functions]} && -d /usr/share/zsh/site-functions ]] && fpath=( "${fpath[@]}" /usr/share/zsh/site-functions )
 [[ -z ${path[(re)$HOME/bin]} && -d "$HOME/bin" ]] && path=( "$HOME/bin" "${path[@]}" )
 [[ -z ${path[(re)$HOME/.local/bin]} && -d "$HOME/.local/bin" ]] && path=( "$HOME/.local/bin" "${path[@]}" )
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 ZINIT[ZCOMPDUMP_PATH]="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache/zinit}}/zcompdump-${HOST/.*/}-${ZSH_VERSION}"
 #WORDCHARS=' *?_-.~\'
 pchf="${0:h}/patches"
@@ -60,14 +63,15 @@ PER_DIRECTORY_HISTORY_BASE="${ZPFX}/per-directory-history"
 export HISTSIZE=1000000
 export SAVEHIST=1000000
 export HISTFILE="${XDG_DATA_HOME}/zsh/history"
-export WGETRC="${XDG_CONFIG_HOME}/wgetrc"
 export LESS="-FiMRSW -x4"
-export LESSKEY="${XDG_CONFIG_HOME}/less/lesskey"
 export LESSHISTFILE="${XDG_CACHE_HOME}/less/history"
 export TMPPREFIX="${TMPDIR%/}/zsh"
 
-# Directory checked for locally built projects (plugin NICHOLAS85/updatelocal)
-UPDATELOCAL_GITDIR="${HOME}/Github/public"
+# ensure directory/files exist
+[[ -d $PER_DIRECTORY_HISTORY_BASE ]] || mkdir -p $PER_DIRECTORY_HISTORY_BASE
+[[ -f $HISTFILE ]] || install -D /dev/null $HISTFILE
+[[ -f $LESSHISTFILE ]] || install -D /dev/null $LESSHISTFILE
+[[ -f ${TMPDIR}/chpwd-recent-dirs ]] || install -D /dev/null ${TMPDIR}/chpwd-recent-dirs
 
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
@@ -140,7 +144,7 @@ alias ..='cd .. 2>/dev/null || cd "$(dirname $PWD)"' # Allows leaving from delet
 [[ $MYPROMPT = dolphin ]] && alias cd='clear -x; cd'
 
 # dot file management
-alias dots='DOTBARE_DIR="$HOME/.local/share/dotfiles/home" DOTBARE_TREE="$HOME" DOTBARE_BACKUP="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/home-backup" dotbare'
+alias dots='DOTBARE_DIR="$HOME/.local/share/dotfiles/home" DOTBARE_TREE="$HOME" DOTBARE_BACKUP="${XDG_DATA_HOME}/dotfiles/home-backup" dotbare'
 export DOTBARE_FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"
 export DOTBARE_DIFF_PAGER=delta
 
@@ -154,7 +158,7 @@ alias "r${stratum}"="strat -r ${stratum}"
 [[ -d "/bedrock/strata/${stratum}/etc/.git" ]] && \
 alias "${stratum:0:1}edots"="command sudo strat -r ${stratum} git --git-dir=/etc/.git --work-tree=/etc"
 done }
-alias bedots="DOTBARE_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/root DOTBARE_TREE=/bedrock DOTBARE_BACKUP=${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/root-backup dotbare"
+alias bedots="DOTBARE_DIR=${XDG_DATA_HOME}/dotfiles/root DOTBARE_TREE=/bedrock DOTBARE_BACKUP=${XDG_DATA_HOME}/dotfiles/root-backup dotbare"
 }
 
 #########################
@@ -222,8 +226,6 @@ zstyle ':fzf-tab:complete:man:*' fzf-preview 'man ${${=group}[4]} $word | col -b
 zstyle ':fzf-tab:complete:(cd|ls|lsd):*' fzf-preview '[[ -d $realpath ]] && ls -1 --color=always -- $realpath'
 zstyle ':fzf-tab:complete:((micro|cp|rm|bat):argument-rest|kate:*)' fzf-preview 'bat --color=always -- $realpath 2>/dev/null || ls --color=always -- $realpath'
 zstyle ':fzf-tab:complete:micro:argument-rest' fzf-flags --preview-window=right:65%
-zstyle ':fzf-tab:complete:updatelocal:argument-rest' fzf-preview "git --git-dir=$UPDATELOCAL_GITDIR/\${word}/.git log --color --date=short --pretty=format:'%Cgreen%cd %h %Creset%s %Cred%d%Creset ||%b' ..FETCH_HEAD 2>/dev/null"
-zstyle ':fzf-tab:complete:updatelocal:argument-rest' fzf-flags --preview-window=down:5:wrap
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
   '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'

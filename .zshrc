@@ -85,8 +85,6 @@ zt wait light-mode for \
         wfxr/forgit \
     trigger-load'!ugit' \
         Bhupesh-V/ugit \
-    trigger-load'!updatelocal' blockf compile'f*/*~*.zwc' \
-        NICHOLAS85/updatelocal \
     trigger-load'!zhooks' \
         agkozak/zhooks \
     trigger-load'!gcomp' blockf \
