@@ -1,62 +1,74 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# https://github.com/NICHOLAS85/dotfiles/blob/xps_13_9365_refresh/.zshrc
+export TMP=${TMP:-${TMPDIR:-/tmp}}
+export TMPDIR=$TMP
+# Change shell behavior when opening the terminal view in dolphin. MYPROMPT set by konsole profile
+if ! [[ $MYPROMPT = dolphin ]]; then
+    # Use chpwd_recent_dirs to start new sessions from last working dir
+    # Populate dirstack with chpwd history
+    autoload -Uz chpwd_recent_dirs add-zsh-hook
+    add-zsh-hook chpwd chpwd_recent_dirs
+    zstyle ':chpwd:*' recent-dirs-file "${TMPDIR}/chpwd-recent-dirs"
+    dirstack=("${(u)^${(@fQ)$(<${$(zstyle -L ':chpwd:*' recent-dirs-file)[4]} 2>/dev/null)}[@]:#(\.|${TMPDIR:A}/*)}"(N-/))
+    [[ ${PWD} = ${HOME}  || ${PWD} = "." ]] && (){
+        local dir
+        for dir ($dirstack){
+            [[ -d "${dir}" ]] && { cd -q "${dir}"; break }
+        }
+    } 2>/dev/null
 fi
 
+ZINIT_HOME="${ZINIT_HOME:-${ZPLG_HOME:-${ZDOTDIR:-${HOME}}/.zinit}}"
+ZINIT_BIN_DIR_NAME="${${ZINIT_BIN_DIR_NAME:-${ZPLG_BIN_DIR_NAME}}:-bin}"
 ### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+if [[ ! -f "${ZINIT_HOME}/${ZINIT_BIN_DIR_NAME}/zinit.zsh" ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
+    command mkdir -p "${ZINIT_HOME}" && command chmod g-rwX "${ZINIT_HOME}"
+    command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME/$ZINIT_BIN_DIR_NAME" && \\
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f"
 fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
+source "${ZINIT_HOME}/${ZINIT_BIN_DIR_NAME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-### End of Zinit's installer chunk
-
-# Load custom config files
-ZINIT[CUSTOM_DIR]="${ZINIT[HOME_DIR]}/custom"
-
-if [[ ! -d ${ZINIT[SNIPPETS_DIR]}/config && -d ${ZINIT[CUSTOM_DIR]}/config ]]; then
-    mkdir -p ${ZINIT[SNIPPETS_DIR]}
-    cp -r ${ZINIT[CUSTOM_DIR]}/* ${ZINIT[SNIPPETS_DIR]/}
-fi
-
-[[ ! -f ${ZINIT[SNIPPETS_DIR]}/config/config.plugin.zsh ]] || source ${ZINIT[SNIPPETS_DIR]}/config/config.plugin.zsh
-
-
-###########
-# Annexes #
-###########
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-submods \
-    NICHOLAS85/z-a-linkman \
-    NICHOLAS85/z-a-linkbin
+### End of Zinit installer's chunk
 
 # A binary Zsh module which transparently and automatically compiles sourced scripts
-module_path+=( "${HOME}/.zinit/bin/zmodules/Src" )
-zmodload zdharma/zinit &>/dev/null
+module_path+=( "${HOME}/.zinit/module/Src" )
+# zmodload zdharma-continuum/zinit
 
 # Functions to make configuration less verbose
 # zt() : First argument is a wait time and suffix, ie "0a". Anything that doesn't match will be passed as if it were an ice mod. Default ices depth'3' and lucid
-zt(){ zinit depth'3' lucid ${1/#[0-9][a-c]/wait"${1}"} "${@:2}"; }
+zt(){ zinit depth'3' lucid "${@}"; }
 
-#########
-# THEME #
-#########
+#################
+#    Annexes    #
+# Config source #
+#     Prompt    #
+#################
 
-# p10k theme - configure with 'p10k' command
-zinit depth'1' light-mode for \
-    romkatv/powerlevel10k
+zt light-mode blockf svn id-as for \
+        https://github.com/NICHOLAS85/dotfiles/trunk/.zinit/snippets/config
+
+# zcompile doesn't support Unicode file names, planned on using compile'*handler' ice.
+# https://www.zsh.org/mla/workers/2020/msg01057.html
+zt light-mode for \
+        zdharma-continuum/z-a-patch-dl \
+        zdharma-continuum/z-a-submods \
+        NICHOLAS85/z-a-linkman \
+        NICHOLAS85/z-a-linkbin \
+        atinit'Z_A_USECOMP=1' \
+        NICHOLAS85/z-a-eval
+
+(){ # Load $MYPROMPT configuration and powerlevel10k
+    if [[ -f "${thmf}/${1}-pre.zsh" || -f "${thmf}/${1}-post.zsh" ]] && {
+        zt light-mode for \
+                romkatv/powerlevel10k \
+            id-as"${1}-theme" \
+            atinit"[[ -f ${thmf}/${1}-pre.zsh ]] && source ${thmf}/${1}-pre.zsh" \
+            atload"[[ -f ${thmf}/${1}-post.zsh ]] && source ${thmf}/${1}-post.zsh" \
+                zdharma-continuum/null
+    } || print -P "%F{220}Theme \"${1}\" not found%f"
+} "${MYPROMPT=p10k}"
 
 ###########
 # Plugins #
@@ -66,16 +78,21 @@ zinit depth'1' light-mode for \
 # Trigger-load block #
 ######################
 
-zt light-mode for \
+zt wait light-mode for \
     trigger-load'!x' svn \
         OMZ::plugins/extract \
-    trigger-load'!man' \
-        ael-code/zsh-colored-man-pages \
-    trigger-load'!ga;!grh;!glo;!gd;!gcf;!gclean;!gss;!gcp' \
+    trigger-load'!ga;!grh;!grb;!glo;!gd;!gcf;!gclean;!gss;!gcp;!gcb' \
         wfxr/forgit \
+    trigger-load'!ugit' \
+        Bhupesh-V/ugit \
+    trigger-load'!updatelocal' blockf compile'f*/*~*.zwc' \
+        NICHOLAS85/updatelocal \
+    trigger-load'!zhooks' \
+        agkozak/zhooks \
     trigger-load'!gcomp' blockf \
     atclone'command rm -rf lib/*;git ls-files -z lib/ |xargs -0 git update-index --skip-worktree' \
-    submods'RobSis/zsh-completion-generator -> lib/zsh-completion-generator; nevesnunes/sh-manpage-completions -> lib/sh-manpage-completions' \
+    submods'RobSis/zsh-completion-generator -> lib/zsh-completion-generator;
+    nevesnunes/sh-manpage-completions -> lib/sh-manpage-completions' \
     atload' gcomp(){gencomp "${@}" && zinit creinstall -q ${ZINIT[SNIPPETS_DIR]}/config 1>/dev/null}' \
          Aloxaf/gencomp
 
@@ -83,88 +100,93 @@ zt light-mode for \
 # Wait'0a' block #
 ##################
 
-zt 0a light-mode for \
-        OMZP::systemd/systemd.plugin.zsh \
-        OMZP::sudo/sudo.plugin.zsh \
-    atload'zstyle ":completion:*" special-dirs false' \
-        OMZL::completion.zsh \
+zt light-mode for \
+    atload'FAST_HIGHLIGHT[chroma-man]=' \
+    atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
+    compile'.*fast*~*.zwc' nocompletions atpull'%atclone' \
+        zdharma-continuum/fast-syntax-highlighting \
+    atload'_zsh_autosuggest_start' \
+        zsh-users/zsh-autosuggestions \
+    compile'h*~*.zwc' \
+        zdharma-continuum/history-search-multi-word \
     as'completion' atpull'zinit cclear' blockf \
         zsh-users/zsh-completions \
     as'completion' nocompile mv'*.zsh -> _git' patch"${pchf}/%PLUGIN%.patch" reset \
         felipec/git-completion \
-    blockf compile'lib/*f*~*.zwc' \
-        Aloxaf/fzf-tab \
-    blockf atclone'lua ./z.lua --init zsh enhanced once fzf 1>/dev/null' \
-    atpull'%atclone' atload'zstyle ":fzf-tab:complete:_zlua:*" query-string input' \
-        skywind3000/z.lua \
-    ver'develop' atload'_zsh_autosuggest_start' \
-        zsh-users/zsh-autosuggestions
+    blockf \
+        agkozak/zsh-z
 
 ##################
 # Wait'0b' block #
 ##################
 
-zt 0b light-mode patch"${pchf}/%PLUGIN%.patch" reset nocompile'!' for \
+zt light-mode patch"${pchf}/%PLUGIN%.patch" reset nocompile'!' for \
+    blockf nocompletions compile'functions/*~*.zwc' \
+        marlonrichert/zsh-edit \
     atload'ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(autopair-insert)' \
         hlissner/zsh-autopair \
-    pack'no-dir-color-swap' atload"zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}" \
+    atload'ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(__fz_zsh_completion)' \
+        changyuheng/fz \
+    eval'dircolors -b LS_COLORS' atload"zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}" \
         trapd00r/LS_COLORS \
     atload'add-zsh-hook chpwd @chwpd_dir-history-var;
-    add-zsh-hook zshaddhistory @append_dir-history-var; @chwpd_dir-history-var' \
-    src'per-directory-history.zsh' \
+    add-zsh-hook zshaddhistory @append_dir-history-var; @chwpd_dir-history-var now' \
         kadaan/per-directory-history \
-    compile'h*' \
-        zdharma/history-search-multi-word \
     trackbinds bindmap'\e[1\;6D -> ^[[1\;5B; \e[1\;6C -> ^[[1\;5A' \
-        michaelxmcbride/zsh-dircycle \
-    blockf nocompletions compile'functions/*~*.zwc' \
-        marlonrichert/zsh-edit
+        michaelxmcbride/zsh-dircycle
 
-zt 0b light-mode for \
+zt light-mode for \
+    blockf compile'lib/*f*~*.zwc' \
+        Aloxaf/fzf-tab \
     autoload'#manydots-magic' \
         knu/zsh-manydots-magic \
         RobSis/zsh-reentry-hook \
-    atinit'zicompinit_fast; zicdreplay' atload'FAST_HIGHLIGHT[chroma-man]=' \
-    atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
-    compile'.*fast*~*.zwc' nocompletions atpull'%atclone' \
-        zdharma/fast-syntax-highlighting \
-    atload'bindkey "^[[A" history-substring-search-up; bindkey "^[[B" history-substring-search-down' \
-        zsh-users/zsh-history-substring-search
+    pick'autoenv.zsh' nocompletions \
+        Tarrasch/zsh-autoenv \
+    multisrc'*.zsh' nocompletions \
+        imrancio/.cfg \
+    atload'bindkey "^[[A" history-substring-search-up;
+    bindkey "^[[B" history-substring-search-down' \
+        zsh-users/zsh-history-substring-search \
+        OMZP::systemd/systemd.plugin.zsh \
+        OMZP::sudo/sudo.plugin.zsh
 
 ##################
 # Wait'0c' block #
 ##################
-zt 0c light-mode binary from'gh-r' lman lbin for \
+
+zt light-mode binary from'gh-r' lman lbin for \
     bpick'*linux64*' \
         zyedidia/micro \
-    lbin'%PLUGIN%*/%PLUGIN%' atclone'mv -f **/*.zsh _bat' atpull'%atclone' \
+    atclone'mv -f **/*.zsh _bat' atpull'%atclone' \
         @sharkdp/bat \
         @sharkdp/hyperfine \
         @sharkdp/fd
-zt 0c light-mode binary for \
-    lbin'bin/*' \
+
+zt light-mode binary for \
+    lbin \
         laggardkernel/git-ignore \
-    lbin'*/lsd' from'gh-r' atclone'wget -q https://raw.githubusercontent.com/Peltoche/lsd/master/doc/lsd.md -O lsd.1.ronn; ronn lsd.1.ronn' atpull'%atclone' lman \
+    lbin from'gh-r' \
         Peltoche/lsd \
-    lbin'nnn* -> nnn' from'gh-r' bpick'*nerd*' atclone'wget -q https://raw.githubusercontent.com/jarun/nnn/master/nnn.1' atpull'%atclone' lman  \
-        jarun/nnn
-zt 0c light-mode null for \
+    lbin'!' patch"${pchf}/%PLUGIN%.patch" reset \
+        kazhala/dotbare
+
+zt light-mode null for \
+    make lbin'build/*' \
+        zdharma-continuum/zshelldoc \
     lbin'*d.sh;*n.sh' \
         bkw777/notify-send.sh \
-    lbin'antidot* -> antidot' from'gh-r' atclone'./**/antidot* update 1>/dev/null' atpull'%atclone' \
+    lbin'antidot* -> antidot' from'gh-r' atclone'./**/antidot* update 1>/dev/null' atpull'%atclone' eval'antidot init' \
         doron-cohen/antidot \
-    lbin'git-open' \
+    lbin from'gh-r' bpick'*x_x86*' \
+        charmbracelet/glow \
+    lbin \
         paulirish/git-open \
-    lbin'*/delta' from'gh-r' patch"${pchf}/%PLUGIN%.patch" \
+    lbin'*/delta;git-dsf' from'gh-r' patch"${pchf}/%PLUGIN%.patch" \
         dandavison/delta \
-    lbin'rm-trash/rm-trash' lman patch"${pchf}/%PLUGIN%.patch" atload'alias rm=rm-trash' reset \
+    lbin lman patch"${pchf}/%PLUGIN%.patch" reset \
         nateshmbhat/rm-trash \
-    lbin'fzf' from'gh-r' atclone'wget -q https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1' atpull'%atclone' lman \
+    lbin from'gh-r' dl'https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1' lman \
         junegunn/fzf \
-    id-as'Cleanup' nocd atinit'unset -f zt; _zsh_autosuggest_bind_widgets' \
-        zdharma/null
-
-[[ ! -d ${ZINIT[CUSTOM_DIR]} ]] || for f in ${ZINIT[CUSTOM_DIR]}/*.zsh; do source "$f"; done
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    id-as'Cleanup' nocd atinit'unset -f zt; zicompinit_fast; zicdreplay; _zsh_highlight_bind_widgets; _zsh_autosuggest_bind_widgets' \
+        zdharma-continuum/null
