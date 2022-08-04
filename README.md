@@ -32,7 +32,7 @@ cfg push
 
 > ProTip :fire:: Use a script like [mine](https://files.imranc.io/cfg-install.sh) to setup new system automatically (and skip all remaining steps):
 ```bash
-bash <(curl -s https://files.imranc.io/cfg-install.sh)
+bash <(curl -s https://files.imranc.io/static/cfg/clone)
 ```
 
 If you already store your configuration/dotfiles in a Git repository, on a new system you can migrate to this setup with the following steps:
@@ -81,9 +81,9 @@ Aborting
 This is because your `$HOME` folder might already have some stock configuration files which would be overwritten by Git. The solution is simple: back up the files if you care about them, remove them if you don't care. I provide you with a possible rough shortcut to move all the offending files automatically to a backup folder:
 
 ```bash
-mkdir -p .config-backup && \
-config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
-xargs -I{} mv {} .config-backup/{}
+mkdir -p .cfg-backup && \
+cfg checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
+xargs -I{} mv {} .cfg-backup/{}
 ```
 
 - Re-run the check out if you had problems:
