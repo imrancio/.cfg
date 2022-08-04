@@ -28,3 +28,21 @@ rebase() {
     echo "Usage: rebase <target branch>"
   fi
 }
+
+# decode bas64
+b64decode() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: b64decode <base64 encoded text>"
+  else
+    echo "$1" | base64 --decode
+  fi
+}
+
+# encode base64
+b64encode() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: b64encode <plain text>"
+  else
+    echo "$1" | base64 --encode
+  fi
+}
