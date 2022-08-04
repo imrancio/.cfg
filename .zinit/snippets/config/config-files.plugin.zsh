@@ -92,6 +92,8 @@ export SYSTEMD_EDITOR=${EDITOR}
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=true # etckeeper on bedrock
 export VSCODE="code --wait"
 export GIT_EDITOR="$VSCODE"
+# reset manpath to default
+export MANPATH=""
 
 FZF_DEFAULT_OPTS="
 --border
