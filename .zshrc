@@ -47,7 +47,7 @@ zt(){ zinit depth'3' lucid "${@}"; }
 #################
 
 zt light-mode blockf svn id-as for \
-        https://github.com/NICHOLAS85/dotfiles/trunk/.zinit/snippets/config
+        https://github.com/imrancio/.cfg/trunk/.zinit/snippets/config
 
 # zcompile doesn't support Unicode file names, planned on using compile'*handler' ice.
 # https://www.zsh.org/mla/workers/2020/msg01057.html
@@ -157,14 +157,15 @@ zt light-mode binary from'gh-r' lman lbin for \
     bpick'*linux64*' \
         zyedidia/micro \
     atclone'mv -f **/*.zsh _bat' atpull'%atclone' \
-        @sharkdp/bat \
+        atload"alias cat='bat'" \
+            @sharkdp/bat \
         @sharkdp/hyperfine \
         @sharkdp/fd
 
 zt light-mode binary for \
     lbin \
         laggardkernel/git-ignore \
-    lbin from'gh-r' \
+    lbin from'gh-r' atload"alias ls='lsd'" \
         Peltoche/lsd \
     lbin'!' patch"${pchf}/%PLUGIN%.patch" reset \
         kazhala/dotbare
@@ -176,11 +177,9 @@ zt light-mode null for \
         bkw777/notify-send.sh \
     lbin'antidot* -> antidot' from'gh-r' atclone'./**/antidot* update 1>/dev/null' atpull'%atclone' eval'antidot init' \
         doron-cohen/antidot \
-    lbin from'gh-r' bpick'*x_x86*' \
-        charmbracelet/glow \
     lbin \
         paulirish/git-open \
-    lbin'*/delta;git-dsf' from'gh-r' patch"${pchf}/%PLUGIN%.patch" \
+    lbin'*/delta' from'gh-r' patch"${pchf}/%PLUGIN%.patch" \
         dandavison/delta \
     lbin lman patch"${pchf}/%PLUGIN%.patch" reset \
         nateshmbhat/rm-trash \
