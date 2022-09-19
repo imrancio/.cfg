@@ -187,3 +187,6 @@ zt light-mode null for \
         junegunn/fzf \
     id-as'Cleanup' nocd atinit'unset -f zt; zicompinit_fast; zicdreplay; _zsh_highlight_bind_widgets; _zsh_autosuggest_bind_widgets' \
         zdharma-continuum/null
+
+# Any system-specific configuration
+[[ ! -f ~/.zshrc-post ]] || source ~/.zshrc-post
