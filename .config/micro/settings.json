@@ -1,3 +1,5 @@
 {
-    "mkparents": true
+    "mkparents": true,
+    "savecursor": true,
+    "saveundo": true
 }
