@@ -31,6 +31,7 @@ alias quit='exit'
 alias q='exit'
 alias hd='hexdump'
 alias ..='cd .. 2>/dev/null || cd "$(dirname $PWD)"' # Allows leaving from deleted directories
+alias -- -='cd -'
 
 # network helpers
 alias ping4='ping -4'
