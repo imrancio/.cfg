@@ -32,7 +32,7 @@ cfg push
 
 > ProTip :fire:: Use a script like [mine](https://files.imranc.io/static/cfg/clone) to setup new system automatically (and skip all remaining steps):
 ```bash
-bash <(curl -s https://files.imranc.io/static/cfg/clone)
+curl -s https://files.imranc.io/static/cfg/clone | bash
 ```
 
 If you already store your configuration/dotfiles in a Git repository, on a new system you can migrate to this setup with the following steps:
