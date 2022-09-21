@@ -119,7 +119,7 @@ zt light-mode for \
 ##################
 
 zt light-mode patch"${pchf}/%PLUGIN%.patch" reset nocompile'!' for \
-    blockf nocompletions compile'functions/*~*.zwc' \
+    blockf nocompletions compile'functions/*~*.zwc' src'zsh-edit.plugin.zsh' \
         marlonrichert/zsh-edit \
     atload'ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(autopair-insert)' \
         hlissner/zsh-autopair \
@@ -157,7 +157,7 @@ zt light-mode binary from'gh-r' lman lbin for \
     bpick'*linux64*' \
         zyedidia/micro \
     atclone'mv -f **/*.zsh _bat' atpull'%atclone' \
-        atload"alias cat='bat'" \
+        atload"alias cat='bat -p'" \
             @sharkdp/bat \
         @sharkdp/hyperfine \
         @sharkdp/fd
