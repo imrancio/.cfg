@@ -30,7 +30,7 @@ cfg push
 
 ## Install your dotfiles onto a new system (or migrate to this setup)
 
-> ProTip :fire:: Use a script like [mine](https://files.imranc.io/cfg-install.sh) to setup new system automatically (and skip all remaining steps):
+> ProTip :fire:: Use a script like [mine](https://files.imranc.io/static/cfg/clone) to setup new system automatically (and skip all remaining steps):
 ```bash
 bash <(curl -s https://files.imranc.io/static/cfg/clone)
 ```
