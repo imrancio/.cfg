@@ -50,7 +50,7 @@ b64encode() {
 # update all git subdirectories (depth 1)
 git-pull-all() {
   if command -v fd &> /dev/null; then
-    fd -d1 -td -x git --git-dir={}/.git --work-tree=$PWD/{} pull
+    fd -td -d1 -x git --git-dir={}/.git --work-tree=$PWD/{} pull
   else
     find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull \;
   fi
