@@ -92,7 +92,7 @@ zt wait light-mode for \
     submods'RobSis/zsh-completion-generator -> lib/zsh-completion-generator;
     nevesnunes/sh-manpage-completions -> lib/sh-manpage-completions' \
     atload' gcomp(){gencomp "${@}" && zinit creinstall -q ${ZINIT[SNIPPETS_DIR]}/config 1>/dev/null}' \
-         Aloxaf/gencomp
+        Aloxaf/gencomp
 
 ##################
 # Wait'0a' block #
@@ -100,7 +100,7 @@ zt wait light-mode for \
 
 zt light-mode for \
     atload'FAST_HIGHLIGHT[chroma-man]=' \
-    atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
+    atclone' fasthighlight(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
     compile'.*fast*~*.zwc' nocompletions atpull'%atclone' \
         zdharma-continuum/fast-syntax-highlighting \
     atload'_zsh_autosuggest_start' \
