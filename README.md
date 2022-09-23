@@ -1,4 +1,5 @@
 # .cfg
+
 Configuration .dotfiles
 
 ## Starting from scratch
@@ -31,6 +32,7 @@ cfg push
 ## Install your dotfiles onto a new system (or migrate to this setup)
 
 > ProTip :fire:: Use a script like [mine](https://cdn.imranc.io/static/cfg/clone) to setup new system automatically (and skip all remaining steps):
+
 ```bash
 curl -s https://cdn.imranc.io/static/cfg/clone | bash
 ```
@@ -107,4 +109,12 @@ cfg commit -m "Add vimrc"
 cfg add .bashrc
 cfg commit -m "Add bashrc"
 cfg push
+```
+
+## Install zsh config only
+
+If you only want to install my zsh config without any of my other config files, run the following helper script:
+
+```bash
+curl -s https://cdn.imranc.io/static/zsh/init | bash
 ```
