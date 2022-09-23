@@ -75,5 +75,8 @@
   },
   "workbench.iconTheme": "material-icon-theme",
   "workbench.startupEditor": "newUntitledFile",
-  "window.titleBarStyle": "custom"
+  "window.titleBarStyle": "custom",
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
