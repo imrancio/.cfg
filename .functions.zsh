@@ -47,11 +47,16 @@ b64encode() {
   fi
 }
 
-# update all git subdirectories (depth 1)
-git-pull-all() {
+# run git command on all subdirectories (depth 1)
+git-all(){
   if command -v fd &> /dev/null; then
-    fd -td -d1 -x git --git-dir={}/.git --work-tree=$PWD/{} pull
+    fd -td -d1 -x git --git-dir={}/.git --work-tree=$PWD/{} "$@"
   else
-    find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull \;
+    find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} "$@" \;
   fi
+}
+
+# pull all git subdirectories (depth 1)
+git-pull-all() {
+  git-all pull
 }
