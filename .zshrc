@@ -179,7 +179,7 @@ zt light-mode null for \
         doron-cohen/antidot \
     lbin \
         paulirish/git-open \
-    lbin'*/delta' from'gh-r' patch"${pchf}/%PLUGIN%.patch" \
+    lbin'*/delta' from'gh-r' patch"${pchf}/%PLUGIN%.patch" atload'grep -Fxq "$dandavison_delta_git_config" ~/.gitconfig || echo "$dandavison_delta_git_config" >> ~/.gitconfig' \
         dandavison/delta \
     lbin lman patch"${pchf}/%PLUGIN%.patch" reset \
         nateshmbhat/rm-trash \
